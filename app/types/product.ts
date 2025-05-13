@@ -20,3 +20,10 @@ export interface Product {
     returnPolicy: string;
     minimumOrderQuantity: number;
 }
+
+export interface ProductsResponse {
+  products: Product[];
+  total: number;
+  skip: number;
+  limit: number;
+}
