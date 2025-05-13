@@ -1,4 +1,3 @@
-// app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -24,9 +23,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50 min-h-screen`}>
-        <header className="text-white py-4">
-          <div className="container mx-auto px-4">
+      <body className={`${inter.className} bg-gray-50 min-h-screen lg:px-20`}>
+        <header className="py-4">
+          <div className="container mx-auto px-4 flex justify-between items-center">
             <Link href="/" className="text-3xl font-bold">Product Catalog</Link>
           </div>
         </header>

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useProductStore } from "./store/productStore";
+import ProductCard from "@/components/product/ProductCard";
 
 export default function Home() {
   const {
@@ -13,7 +14,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   if (error) {
     <div>
@@ -27,21 +28,18 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <h1>Product Catalog</h1>
-      <div>
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="p-4">
         Filter
       </div>
-      <div>
-        Products
-
-        {
-          products.map((product) => (
-            <div key={product.id}>
-              <p>{product.title}</p>
-            </div>
-          ))
-        }
+      <div className="col-span-3 p-4">
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+          {
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          }
+        </div>
       </div>
     </div>
   );
