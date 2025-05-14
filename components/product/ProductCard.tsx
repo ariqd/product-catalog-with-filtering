@@ -3,7 +3,11 @@ import React from 'react'
 import Image from 'next/image'
 import { Star } from 'lucide-react'
 
-const ProductCard = ({ product }: { product: Product }) => {
+interface ProductCardProps {
+    product: Product;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
         <div className='flex flex-col border rounded'>
             <div className='relative h-64 w-auto'>
@@ -32,7 +36,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                                 <span className="font-bold text-gray-900">
                                     ${(product.price - (product.price / product.discountPercentage)).toFixed(2)}
                                 </span>
-                                <span className="ml-2 text-xs text-gray-500 line-through">${product.price.toFixed(2)}</span>
+                                <span className="ml-2 text-xs text-gray-400 line-through">${product.price.toFixed(2)}</span>
                             </div>
                         ) : <span className="font-bold text-gray-900">${product.price.toFixed(2)}</span>
                     }
