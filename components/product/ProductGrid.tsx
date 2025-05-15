@@ -1,17 +1,33 @@
-import React, { useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import ProductSkeleton from './ProductSkeleton'
-import { Product, ProductState } from '@/app/types/product'
+import { Product } from '@/app/types/product'
 import ProductCard from './ProductCard'
+import { useProductStore } from '@/app/store/productStore'
 
-const ProductGrid: React.FC<ProductState> = ({ products, isLoading, error, fetchProducts }) => {
+const ProductGrid: React.FC = () => {
+    const {
+        isLoading,
+        error,
+        fetchProducts,
+        products
+    } = useProductStore();
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
+
     const refetchProducts = useCallback(() => {
         fetchProducts();
     }, [fetchProducts]);
 
     if (isLoading) {
-        return Array(12).fill(0).map((_, index) => (
-            <ProductSkeleton key={index} />
-        ))
+        return (
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+                {Array(12).fill(0).map((_, index) => (
+                    <ProductSkeleton key={index} />
+                ))}
+            </div>
+        )
     }
 
     if (error) {
@@ -21,9 +37,13 @@ const ProductGrid: React.FC<ProductState> = ({ products, isLoading, error, fetch
         </div>
     }
 
-    return products.map((product: Product) => (
-        <ProductCard key={product.id} product={product} />
-    ))
+    return (
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
+            {products.map((product: Product) => (
+                <ProductCard key={product.id} product={product} />
+            ))}
+        </div>
+    )
 }
 
-export default ProductGrid
+export default memo(ProductGrid)
