@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import ProductSkeleton from './ProductSkeleton'
 import { Product } from '@/app/types/product'
 import ProductCard from './ProductCard'
@@ -16,14 +16,12 @@ const ProductGrid: React.FC = () => {
 
     const { selectedCategories } = useCategoryStore();
 
-    // const [filtered, setFiltered] = useState<Product[]>([]);
-
     useEffect(() => {
         fetchProducts();
     }, [fetchProducts]);
 
     useEffect(() => {
-        // FIlter products based on selected categories
+        // Filter products based on selected categories
         const filteredProducts = products.filter((product: Product) => {
             if (selectedCategories.length === 0) return true;
             return selectedCategories.some((category) => product.category.includes(category.slug));
