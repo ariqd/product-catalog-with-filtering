@@ -9,12 +9,14 @@ const ProductGrid: React.FC = () => {
         isLoading,
         error,
         fetchProducts,
-        products
+        products,
+        setFilteredProducts,
+        filteredProducts
     } = useProductStore();
 
     const { selectedCategories } = useCategoryStore();
 
-    const [filtered, setFiltered] = useState<Product[]>([]);
+    // const [filtered, setFiltered] = useState<Product[]>([]);
 
     useEffect(() => {
         fetchProducts();
@@ -27,8 +29,8 @@ const ProductGrid: React.FC = () => {
             return selectedCategories.some((category) => product.category.includes(category.slug));
         });
 
-        setFiltered(filteredProducts);
-    }, [products, selectedCategories]);
+        setFilteredProducts(filteredProducts);
+    }, [products, selectedCategories, setFilteredProducts]);
 
     const refetchProducts = useCallback(() => {
         fetchProducts();
@@ -53,7 +55,7 @@ const ProductGrid: React.FC = () => {
 
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
-            {filtered.map((product: Product) => (
+            {filteredProducts.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>

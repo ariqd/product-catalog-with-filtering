@@ -8,6 +8,8 @@ interface ProductState {
   isLoading: boolean;
   error: string | null;
   fetchProducts: () => Promise<void>;
+  filteredProducts: Product[];
+  setFilteredProducts: (filteredProducts: Product[]) => void;
 }
 
 interface CategoryState {
@@ -20,10 +22,17 @@ interface CategoryState {
   resetSelectedCategory: () => void;
 }
 
+type PriceStore = {
+  priceRange: [number, number];
+  setPriceRange: (range: [number, number]) => void;
+};
+
 export const useProductStore = create<ProductState>((set) => ({
   products: [],
   isLoading: false,
   error: null,
+  filteredProducts: [],
+  setFilteredProducts: (filteredProducts: Product[]) => set({ filteredProducts }),
   fetchProducts: async () => {
     set({ isLoading: true, error: null });
 
@@ -36,7 +45,7 @@ export const useProductStore = create<ProductState>((set) => ({
 
       const data: ProductsResponse = await response.json();
 
-      set({ products: data?.products, isLoading: false });
+      set({ products: data?.products, isLoading: false, filteredProducts: data?.products });
     } catch (error) {
       set({
         error:
@@ -99,4 +108,9 @@ export const useCategoryStore = create<CategoryState>((set) => ({
       });
     }
   },
+}));
+
+export const usePriceStore = create<PriceStore>((set) => ({
+  priceRange: [0, 1000], // default range
+  setPriceRange: (range) => set({ priceRange: range }),
 }));
