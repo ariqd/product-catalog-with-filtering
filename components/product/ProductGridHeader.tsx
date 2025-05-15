@@ -1,12 +1,28 @@
 import React, { memo } from 'react'
+import SortingDropdown from '../sorting/SortingDropdown'
+import { useCategoryStore } from '@/app/store/productStore';
 
-const ProductGridHeader = () => {
-  return (
-    <div className='flex justify-between items-center mb-4'>
-        <div className='text-2xl font-bold'>All Products</div>
-        <div>Sort By</div>
-    </div>
-  )
+const ProductGridHeader: React.FC = () => {
+    const { selectedCategories } = useCategoryStore();
+
+    return (
+        <div className='flex justify-between items-center mb-4'>
+            {
+                selectedCategories.length > 0 ? (
+                    <div className='text-xl font-bold'>
+                        Showing {selectedCategories.map((category, index) => (
+                            <span key={category.slug}>
+                                {category.name}
+                                {index < selectedCategories.length - 1 ? ', ' : ''}
+                            </span>
+                        ))}
+                    </div>
+                ) :
+                    <div className='text-xl font-bold'>All Products</div>
+            }
+            <SortingDropdown />
+        </div>
+    )
 }
 
 export default memo(ProductGridHeader)

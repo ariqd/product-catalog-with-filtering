@@ -1,8 +1,8 @@
-import React, { memo, useCallback, useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import ProductSkeleton from './ProductSkeleton'
 import { Product } from '@/app/types/product'
 import ProductCard from './ProductCard'
-import { useProductStore } from '@/app/store/productStore'
+import { useCategoryStore, useProductStore } from '@/app/store/productStore'
 
 const ProductGrid: React.FC = () => {
     const {
@@ -12,9 +12,23 @@ const ProductGrid: React.FC = () => {
         products
     } = useProductStore();
 
+    const { selectedCategories } = useCategoryStore();
+
+    const [filtered, setFiltered] = useState<Product[]>([]);
+
     useEffect(() => {
         fetchProducts();
     }, [fetchProducts]);
+
+    useEffect(() => {
+        // FIlter products based on selected categories
+        const filteredProducts = products.filter((product: Product) => {
+            if (selectedCategories.length === 0) return true;
+            return selectedCategories.some((category) => product.category.includes(category.slug));
+        });
+
+        setFiltered(filteredProducts);
+    }, [products, selectedCategories]);
 
     const refetchProducts = useCallback(() => {
         fetchProducts();
@@ -39,7 +53,7 @@ const ProductGrid: React.FC = () => {
 
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
-            {products.map((product: Product) => (
+            {filtered.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>

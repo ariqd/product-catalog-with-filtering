@@ -9,7 +9,7 @@ const CategoryFilter:React.FC = () => {
         isLoading,
         error,
         fetchCategories,
-        categories
+        categories,
     } = useCategoryStore();
 
     useEffect(() => {
