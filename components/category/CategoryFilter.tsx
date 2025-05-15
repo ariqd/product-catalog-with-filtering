@@ -3,13 +3,15 @@ import { useCategoryStore } from '@/app/store/productStore';
 import { Category } from '@/app/types/product';
 import { Skeleton } from '../ui/skeleton';
 import CategoryBox from './CategoryBox';
+import { Button } from '../ui/button';
 
-const CategoryFilter:React.FC = () => {
+const CategoryFilter: React.FC = () => {
     const {
         isLoading,
         error,
         fetchCategories,
         categories,
+        resetSelectedCategory
     } = useCategoryStore();
 
     useEffect(() => {
@@ -43,7 +45,10 @@ const CategoryFilter:React.FC = () => {
 
     return (
         <div className='category-container'>
-            <div className='category-title'>Categories</div>
+            <div className="category-header">
+                <div className='category-title'>Categories <span className='text-xs text-gray-500'>3 max.</span></div>
+                <Button variant={'secondary'} size={'sm'} onClick={() => resetSelectedCategory()}>Reset</Button>
+            </div>
             <div className="h-64 overflow-y-auto">
                 {categories?.map((category: Category) => <CategoryBox key={category.slug} category={category} />)}
             </div>

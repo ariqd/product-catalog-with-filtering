@@ -17,6 +17,7 @@ interface CategoryState {
   fetchCategories: () => void;
   selectedCategories: Category[];
   toggleSelectedCategory: (category: Category) => void;
+  resetSelectedCategory: () => void;
 }
 
 export const useProductStore = create<ProductState>((set) => ({
@@ -27,7 +28,7 @@ export const useProductStore = create<ProductState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch(`${url}/products`);
+      const response = await fetch(`${url}/products?limit=100`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch products");
@@ -71,6 +72,9 @@ export const useCategoryStore = create<CategoryState>((set) => ({
         };
       }
     });
+  },
+  resetSelectedCategory: () => {
+    set({ selectedCategories: [] });
   },
   fetchCategories: async () => {
     set({ isLoading: true, error: null });

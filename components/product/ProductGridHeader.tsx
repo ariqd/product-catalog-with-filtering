@@ -20,7 +20,10 @@ const ProductGridHeader: React.FC = () => {
                 ) :
                     <div className='text-xl font-bold'>All Products</div>
             }
-            <SortingDropdown />
+            <div className="flex items-center">
+                <span className='text-sm mr-2'>Sort by:</span>
+                <SortingDropdown />
+            </div>
         </div>
     )
 }

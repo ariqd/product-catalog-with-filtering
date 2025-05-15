@@ -5,9 +5,10 @@ import { Checkbox } from '../ui/checkbox'
 const RatingFilter: React.FC = () => {
     return (
         <div className='category-container'>
-            <div className='category-title'>Rating</div>
+            <div className="category-header">
+                <div className='category-title'>Rating</div>
+            </div>
             {
-                // descending order of rating, 5 to 1, with 4,2,3,1 have "and above" text
                 [5, 4, 3, 2, 1].map((rating) => (
                     <div key={rating} className='flex items-center mb-3 gap-2'>
                         <Checkbox id={`filter-rating-${rating}`} />

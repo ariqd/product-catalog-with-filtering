@@ -125,7 +125,11 @@
     @apply border-t border-gray-300 pt-4 pb-8
   }
 
+  .category-header {
+    @apply flex items-center justify-between mb-4
+  }
+
   .category-title {
-    @apply text-lg mb-4
+    @apply text-lg
   }
 }

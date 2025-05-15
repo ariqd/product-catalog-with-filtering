@@ -13,7 +13,9 @@ const PriceFilter: React.FC = () => {
 
     return (
         <div className='category-container'>
-            <div className='category-title'>Price Range</div>
+            <div className="category-header">
+                <div className='category-title'>Price Range</div>
+            </div>
             <div className='flex justify-between items-center mb-3'>
                 <span>{currencyFormatter(lowestPrice)}</span>
                 <span>{currencyFormatter(highestPrice)}</span>
