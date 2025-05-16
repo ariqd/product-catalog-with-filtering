@@ -11,8 +11,6 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-
-
     return (
         <Dialog>
             <DialogTrigger asChild>
