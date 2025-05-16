@@ -27,8 +27,8 @@ const ProductDialog = ({ product }: { product: Product }) => {
     return (
         <DialogContent>
             <DialogHeader>
-                <DialogTitle>
-                    <p className="text-gray-900 text-2xl mb-2 overflow-hidden truncate">{product.title}</p>
+                <DialogTitle className='pr-10'>
+                    <p className="text-gray-900 text-2xl mb-2 overflow-hidden">{product.title}</p>
                 </DialogTitle>
             </DialogHeader>
             <div>
@@ -74,9 +74,13 @@ const ProductDialog = ({ product }: { product: Product }) => {
                     </div>
                 </div>
 
+                <div className='text-sm mb-2 text-gray-600'>
+                    Current stock: {product.stock} items
+                </div>
+
                 <p className='my-4'>{product.description}</p>
 
-                <div className="flex items-end justify-between">
+                <div className="flex items-end justify-between mt-12">
                     <div className='text-3xl'>
                         {
                             product.discountPercentage ? (
@@ -92,19 +96,14 @@ const ProductDialog = ({ product }: { product: Product }) => {
                     <div>
                         {
                             product.stock > 0 ?
-                                <div className='flex flex-col items-end'>
-                                    <span className='text-green-700 text-sm mb-2'>
-                                        {product.availabilityStatus}!
-                                    </span>
-                                    <Button onClick={() => handleAddToCart(product)}>
-                                        <ShoppingCart />
-                                        {status === "loading" && (
-                                            <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full inline-block mr-2"></span>
-                                        )}
-                                        {status === "added" ? "Added!" : status === "loading" ? "Adding..." : "Add to Cart"}
+                                <Button onClick={() => handleAddToCart(product)}>
+                                    <ShoppingCart />
+                                    {status === "loading" && (
+                                        <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full inline-block mr-2"></span>
+                                    )}
+                                    {status === "added" ? "Added!" : status === "loading" ? "Adding..." : "Add to Cart"}
 
-                                    </Button>
-                                </div>
+                                </Button>
                                 :
                                 <span className='text-sm mb-2 text-gray-700'>{product.availabilityStatus}</span>
                         }
