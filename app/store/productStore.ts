@@ -18,9 +18,26 @@ interface ProductState {
   error: string | null;
   setError: (error: unknown) => void;
   resetSelectedCategory: () => void;
-  sortKey: 'price' | 'rating' | '';
-  sortOrder: 'asc' | 'desc' | '';
-  setSorting: (sortKey?: '' | 'price' | 'rating', sortOrder?: 'asc' | 'desc' | '') => void;
+  sortKey: "price" | "rating" | "";
+  sortOrder: "asc" | "desc" | "";
+  setSorting: (
+    sortKey?: "" | "price" | "rating",
+    sortOrder?: "asc" | "desc" | ""
+  ) => void;
+}
+
+interface CartProduct extends Product {
+  quantity: number;
+}
+
+interface CartState {
+  cart: CartProduct[];
+  addToCart: (product: Product) => void;
+  removeFromCart: (id: number) => void;
+  clearCart: () => void;
+  increaseQuantity: (id: number) => void;
+  decreaseQuantity: (id: number) => void;
+  getTotalPrice: () => number;
 }
 
 interface CategoryState {
