@@ -28,10 +28,20 @@ const ProductGrid: React.FC<ProductGridProps> = ({ refetch }) => {
     }
 
     if (error) {
-        <div>
-            <p>{error}</p>
-            <button onClick={refetchProducts}>Try Again</button>
-        </div>
+        return (
+            <div>
+                <p>{error}</p>
+                <button onClick={refetchProducts}>Try Again</button>
+            </div>
+        )
+    }
+
+    if (filteredProducts.length <= 0) {
+        return (
+            <div className='flex items-center justify-center mt-20'>
+                <div className='text-gray-500 text-sm'>No products found. Please change your product filters and try again.</div>
+            </div>
+        )
     }
 
     return (
