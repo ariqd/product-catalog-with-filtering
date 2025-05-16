@@ -1,9 +1,9 @@
 import React, { memo } from 'react'
 import SortingDropdown from '../sorting/SortingDropdown'
-import { useCategoryStore } from '@/app/store/productStore';
+import { useProductStore } from '@/app/store/productStore';
 
 const ProductGridHeader: React.FC = () => {
-    const { selectedCategories } = useCategoryStore();
+    const { selectedCategories } = useProductStore();
 
     return (
         <div className='flex justify-between items-center mb-4'>

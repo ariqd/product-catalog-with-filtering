@@ -1,15 +1,23 @@
 import { create } from "zustand";
-import { Category, Product, ProductsResponse } from "../types/product";
+import { Category, Product } from "../types/product";
 
 const url = "https://dummyjson.com";
 
 interface ProductState {
   products: Product[];
+  filteredProducts: Product[];
+  selectedCategories: Category[];
+  priceRange: [number, number]; // [min, max]
+  minRating: number;
+  setProducts: (products: Product[]) => void;
+  toggleSelectedCategory: (categories: Category) => void;
+  setPriceRange: (range: [number, number]) => void;
+  setMinRating: (rating: number) => void;
+  applyFilters: () => void;
   isLoading: boolean;
   error: string | null;
-  fetchProducts: () => Promise<void>;
-  filteredProducts: Product[];
-  setFilteredProducts: (filteredProducts: Product[]) => void;
+  setError: (error: unknown) => void;
+  resetSelectedCategory: () => void;
 }
 
 interface CategoryState {
@@ -17,9 +25,6 @@ interface CategoryState {
   isLoading: boolean;
   error: string | null;
   fetchCategories: () => void;
-  selectedCategories: Category[];
-  toggleSelectedCategory: (category: Category) => void;
-  resetSelectedCategory: () => void;
 }
 
 type PriceStore = {
@@ -27,42 +32,47 @@ type PriceStore = {
   setPriceRange: (range: [number, number]) => void;
 };
 
-export const useProductStore = create<ProductState>((set) => ({
+export const useProductStore = create<ProductState>((set, get) => ({
   products: [],
-  isLoading: false,
-  error: null,
   filteredProducts: [],
-  setFilteredProducts: (filteredProducts: Product[]) => set({ filteredProducts }),
-  fetchProducts: async () => {
-    set({ isLoading: true, error: null });
-
-    try {
-      const response = await fetch(`${url}/products?limit=100`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch products");
-      }
-
-      const data: ProductsResponse = await response.json();
-
-      set({ products: data?.products, isLoading: false, filteredProducts: data?.products });
-    } catch (error) {
-      set({
-        error:
-          error instanceof Error
-            ? error.message
-            : "An unknown error has occured",
-        isLoading: false,
-      });
-    }
-  },
-}));
-
-export const useCategoryStore = create<CategoryState>((set) => ({
-  categories: [],
-  isLoading: false,
+  priceRange: [0, Infinity],
+  minRating: 0,
+  isLoading: true,
   error: null,
   selectedCategories: [],
+  setProducts: (products) => {
+    set({ products, isLoading: false });
+    get().applyFilters();
+  },
+  setPriceRange: (range) => {
+    set({ priceRange: range });
+    get().applyFilters();
+  },
+  setMinRating: (rating) => {
+    set({ minRating: rating });
+    get().applyFilters();
+  },
+  applyFilters: () => {
+    const { products, selectedCategories, priceRange, minRating } = get();
+    const filtered = products.filter((product) => {
+      const inCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.some((category) =>
+          product.category.includes(category.slug)
+        );
+      const inPrice =
+        product.price >= priceRange[0] && product.price <= priceRange[1];
+      const meetsRating = product.rating >= minRating;
+      return inCategory && inPrice && meetsRating;
+    });
+    set({ filteredProducts: filtered });
+  },
+  setError: (error) => {
+    set({
+      error:
+        error instanceof Error ? error.message : "An unknown error occured",
+    });
+  },
   toggleSelectedCategory: (category: Category) => {
     set((state) => {
       const isSelected = state.selectedCategories.some(
@@ -81,10 +91,19 @@ export const useCategoryStore = create<CategoryState>((set) => ({
         };
       }
     });
+
+    get().applyFilters();
   },
   resetSelectedCategory: () => {
     set({ selectedCategories: [] });
+    get().applyFilters();
   },
+}));
+
+export const useCategoryStore = create<CategoryState>((set) => ({
+  categories: [],
+  isLoading: false,
+  error: null,
   fetchCategories: async () => {
     set({ isLoading: true, error: null });
 

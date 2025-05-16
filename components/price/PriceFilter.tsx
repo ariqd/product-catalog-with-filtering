@@ -1,15 +1,14 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { Slider } from '../ui/slider'
 import { cn } from '@/lib/utils'
-import { usePriceStore, useProductStore } from '@/app/store/productStore'
+import { useProductStore } from '@/app/store/productStore'
 import { currencyFormatter } from '@/app/utils/transform'
 import { Skeleton } from '../ui/skeleton'
 
 const PriceFilter: React.FC = () => {
-    const { filteredProducts, isLoading } = useProductStore();
-    const { priceRange, setPriceRange } = usePriceStore();
+    const { products, priceRange, setPriceRange, isLoading } = useProductStore();
 
-    const prices = useMemo(() => filteredProducts.map(product => product.price), [filteredProducts]);
+    const prices = useMemo(() => products.map(product => product.price), [products]);
     const highestPrice = useMemo(() => Math.max(...prices), [prices]);
 
     useEffect(() => {

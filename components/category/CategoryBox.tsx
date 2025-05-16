@@ -1,7 +1,7 @@
 import { Category } from '@/app/types/product'
 import React, { memo, useCallback } from 'react'
 import { Checkbox } from '../ui/checkbox'
-import { useCategoryStore } from '@/app/store/productStore'
+import { useProductStore } from '@/app/store/productStore'
 
 interface CategoryBoxProps {
     category: Category
@@ -10,7 +10,7 @@ interface CategoryBoxProps {
 const CategoryBox: React.FC<CategoryBoxProps> = ({ category }) => {
     const { slug, name } = category;
 
-    const { toggleSelectedCategory, selectedCategories } = useCategoryStore();
+    const { toggleSelectedCategory, selectedCategories } = useProductStore();
 
     const toggleCategory = useCallback((category: Category) => {
         toggleSelectedCategory(category);

@@ -6,7 +6,7 @@ import RatingFilter from "../rating/RatingFilter"
 const ProductFilter = () => {
     return (
         <div>
-            <div className='text-xl font-bold mb-4'>
+            <div className='text-xl font-bold mb-6'>
                 Filter
             </div>
             <CategoryFilter />

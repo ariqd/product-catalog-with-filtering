@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react'
-import { useCategoryStore } from '@/app/store/productStore';
+import { useCategoryStore, useProductStore } from '@/app/store/productStore';
 import { Category } from '@/app/types/product';
 import { Skeleton } from '../ui/skeleton';
 import CategoryBox from './CategoryBox';
 import { Button } from '../ui/button';
+import { useCallback, useEffect } from 'react';
 
 const CategoryFilter: React.FC = () => {
     const {
@@ -11,8 +11,9 @@ const CategoryFilter: React.FC = () => {
         error,
         fetchCategories,
         categories,
-        resetSelectedCategory
     } = useCategoryStore();
+
+    const { resetSelectedCategory } = useProductStore();
 
     useEffect(() => {
         fetchCategories();

@@ -1,38 +1,17 @@
-import React, { memo, useCallback, useEffect } from 'react'
+'use client'
+
+import React, { memo } from 'react'
 import ProductSkeleton from './ProductSkeleton'
 import { Product } from '@/app/types/product'
 import ProductCard from './ProductCard'
-import { useCategoryStore, useProductStore } from '@/app/store/productStore'
+import { useProductStore } from '@/app/store/productStore'
 
 const ProductGrid: React.FC = () => {
-    const {
-        isLoading,
-        error,
-        fetchProducts,
-        products,
-        setFilteredProducts,
-        filteredProducts
-    } = useProductStore();
+    const { filteredProducts, isLoading, error } = useProductStore();
 
-    const { selectedCategories } = useCategoryStore();
-
-    useEffect(() => {
-        fetchProducts();
-    }, [fetchProducts]);
-
-    useEffect(() => {
-        // Filter products based on selected categories
-        const filteredProducts = products.filter((product: Product) => {
-            if (selectedCategories.length === 0) return true;
-            return selectedCategories.some((category) => product.category.includes(category.slug));
-        });
-
-        setFilteredProducts(filteredProducts);
-    }, [products, selectedCategories, setFilteredProducts]);
-
-    const refetchProducts = useCallback(() => {
-        fetchProducts();
-    }, [fetchProducts]);
+    // const refetchProducts = useCallback(() => {
+    //     refetch();
+    // }, [refetch]);
 
     if (isLoading) {
         return (
@@ -47,7 +26,7 @@ const ProductGrid: React.FC = () => {
     if (error) {
         <div>
             <p>{error}</p>
-            <button onClick={refetchProducts}>Try Again</button>
+            {/* <button onClick={refetchProducts}>Try Again</button> */}
         </div>
     }
 
