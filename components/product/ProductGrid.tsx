@@ -1,17 +1,21 @@
 'use client'
 
-import React, { memo } from 'react'
+import React, { memo, useCallback } from 'react'
 import ProductSkeleton from './ProductSkeleton'
 import { Product } from '@/app/types/product'
 import ProductCard from './ProductCard'
 import { useProductStore } from '@/app/store/productStore'
 
-const ProductGrid: React.FC = () => {
+interface ProductGridProps {
+    refetch: () => void;
+}
+
+const ProductGrid: React.FC<ProductGridProps> = ({ refetch }) => {
     const { filteredProducts, isLoading, error } = useProductStore();
 
-    // const refetchProducts = useCallback(() => {
-    //     refetch();
-    // }, [refetch]);
+    const refetchProducts = useCallback(() => {
+        refetch();
+    }, [refetch]);
 
     if (isLoading) {
         return (
@@ -26,7 +30,7 @@ const ProductGrid: React.FC = () => {
     if (error) {
         <div>
             <p>{error}</p>
-            {/* <button onClick={refetchProducts}>Try Again</button> */}
+            <button onClick={refetchProducts}>Try Again</button>
         </div>
     }
 

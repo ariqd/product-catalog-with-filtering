@@ -32,7 +32,7 @@ export default function Home() {
       </div>
       <div className="col-span-3 p-4">
         <ProductGridHeader />
-        <ProductGrid />
+        <ProductGrid refetch={getProducts} />
       </div>
     </div>
   );

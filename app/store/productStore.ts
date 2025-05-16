@@ -42,7 +42,6 @@ export const useProductStore = create<ProductState>((set, get) => ({
   selectedCategories: [],
   setProducts: (products) => {
     set({ products, isLoading: false });
-    get().applyFilters();
   },
   setPriceRange: (range) => {
     set({ priceRange: range });
@@ -65,6 +64,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
       const meetsRating = product.rating >= minRating;
       return inCategory && inPrice && meetsRating;
     });
+
     set({ filteredProducts: filtered });
   },
   setError: (error) => {
