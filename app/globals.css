@@ -116,7 +116,20 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  .category-container {
+    @apply border-t border-gray-300 pt-4 pb-8
+  }
+
+  .category-header {
+    @apply flex items-center justify-between mb-4
+  }
+
+  .category-title {
+    @apply text-lg
   }
 }

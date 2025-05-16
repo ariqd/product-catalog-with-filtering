@@ -28,9 +28,7 @@ export interface ProductsResponse {
   limit: number;
 }
 
-export interface ProductState {
-  products: Product[];
-  isLoading: boolean;
-  error: string | null;
-  fetchProducts: () => void;
+export interface Category {
+  slug: string;
+  name: string;
 }

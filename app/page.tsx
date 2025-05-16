@@ -1,35 +1,38 @@
 'use client'
 
-import { useEffect } from "react";
-import { useProductStore } from "./store/productStore";
 import ProductGrid from "@/components/product/ProductGrid";
+import ProductFilter from "@/components/product/ProductFilter";
+import ProductGridHeader from "@/components/product/ProductGridHeader";
+import { fetchProducts } from "./utils/api";
+import { useProductStore } from "./store/productStore";
+import { useCallback, useEffect } from "react";
 
 export default function Home() {
-  const {
-    isLoading,
-    error,
-    fetchProducts,
-    products
-  } = useProductStore();
+  const { setProducts, setError } = useProductStore();
+
+  const getProducts = useCallback(async () => {
+    try {
+      const products = await fetchProducts();
+      if (products) {
+        setProducts(products);
+      }
+    } catch (error) {
+      setError(error);
+    }
+  }, [setProducts, setError]);
 
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    getProducts();
+  }, [getProducts]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-4">
       <div className="p-4">
-        Filter
+        <ProductFilter />
       </div>
       <div className="col-span-3 p-4">
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-          <ProductGrid
-            products={products}
-            isLoading={isLoading}
-            error={error}
-            fetchProducts={fetchProducts}
-          />
-        </div>
+        <ProductGridHeader />
+        <ProductGrid refetch={getProducts} />
       </div>
     </div>
   );
