@@ -2,16 +2,19 @@ import { Star } from 'lucide-react'
 import React, { memo } from 'react'
 import { useProductStore } from '@/app/store/productStore'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { Button } from '../ui/button'
 
 const RatingFilter: React.FC = () => {
     const setMinRating = useProductStore((s) => s.setMinRating);
+    const minRating = useProductStore((s) => s.minRating);
 
     return (
         <div className='category-container'>
-            <div className="category-header">
+            <div className="category-header flex justify-between items-center">
                 <div className='category-title'>Rating</div>
+                <Button variant={'secondary'} size={'sm'} onClick={() => setMinRating(0)}>Reset</Button>
             </div>
-            <RadioGroup>
+            <RadioGroup value={minRating.toString()}>
                 {
                     [5, 4, 3, 2, 1].map((rating) => (
                         <div key={rating} className="flex items-center space-x-2">
