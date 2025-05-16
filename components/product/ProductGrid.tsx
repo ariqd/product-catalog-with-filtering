@@ -5,13 +5,14 @@ import ProductSkeleton from './ProductSkeleton'
 import { Product } from '@/app/types/product'
 import ProductCard from './ProductCard'
 import { useProductStore } from '@/app/store/productStore'
+import { sortProducts } from '@/app/utils/transform'
 
 interface ProductGridProps {
     refetch: () => void;
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ refetch }) => {
-    const { filteredProducts, isLoading, error } = useProductStore();
+    const { filteredProducts, isLoading, error, sortKey, sortOrder } = useProductStore();
 
     const refetchProducts = useCallback(() => {
         refetch();
@@ -46,7 +47,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ refetch }) => {
 
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
-            {filteredProducts.map((product: Product) => (
+            {sortProducts(filteredProducts, sortKey, sortOrder).map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>

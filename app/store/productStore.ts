@@ -18,6 +18,9 @@ interface ProductState {
   error: string | null;
   setError: (error: unknown) => void;
   resetSelectedCategory: () => void;
+  sortKey: 'price' | 'rating' | '';
+  sortOrder: 'asc' | 'desc' | '';
+  setSorting: (sortKey?: '' | 'price' | 'rating', sortOrder?: 'asc' | 'desc' | '') => void;
 }
 
 interface CategoryState {
@@ -40,6 +43,8 @@ export const useProductStore = create<ProductState>((set, get) => ({
   isLoading: true,
   error: null,
   selectedCategories: [],
+  sortKey: '',
+  sortOrder: '',
   setProducts: (products) => {
     set({ products, isLoading: false });
   },
@@ -98,6 +103,9 @@ export const useProductStore = create<ProductState>((set, get) => ({
     set({ selectedCategories: [] });
     get().applyFilters();
   },
+  setSorting: (sortKey?: 'price' | 'rating' | '', sortOrder?: 'asc' | 'desc' | '') => {
+    set({ sortKey: sortKey || '', sortOrder: sortOrder || '' });
+  }
 }));
 
 export const useCategoryStore = create<CategoryState>((set) => ({

@@ -20,31 +20,32 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { ChevronDown } from "lucide-react"
+import { useProductStore } from "@/app/store/productStore"
 
 type Status = {
-    value: string
+    value: [("" | "price" | "rating"), ("" | "asc" | "desc")]
     label: string
 }
 
 const statuses: Status[] = [
     {
-        value: "default",
+        value: ['' , ''],
         label: "Default",
     },
     {
-        value: "rating-high",
+        value: ['rating' , 'desc'],
         label: "Rating: High to Low",
     },
     {
-        value: "rating-low",
+        value: ['rating' , 'asc'],
         label: "Rating: Low to High",
     },
     {
-        value: "price-high",
+        value: ['price' , 'desc'],
         label: "Price: High to Low",
     },
     {
-        value: "price-low",
+        value: ['price' , 'asc'],
         label: "Price: Low to High",
     },
 ]
@@ -55,6 +56,11 @@ export default function SortingDropdown() {
     const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
         null
     )
+    const setSorting = useProductStore((s) => s.setSorting)
+
+    React.useEffect(() => {
+        setSorting(selectedStatus?.value[0], selectedStatus?.value[1])
+    }, [setSorting, selectedStatus])
 
     if (isDesktop) {
         return (
@@ -102,11 +108,11 @@ function StatusList({
                 <CommandGroup>
                     {statuses.map((status) => (
                         <CommandItem
-                            key={status.value}
-                            value={status.value}
+                            key={status.value.join('-')}
+                            value={status.value.join('-')}
                             onSelect={(value) => {
                                 setSelectedStatus(
-                                    statuses.find((priority) => priority.value === value) || null
+                                    statuses.find((priority) => priority.value.join('-') === value) || null
                                 )
                                 setOpen(false)
                             }}
