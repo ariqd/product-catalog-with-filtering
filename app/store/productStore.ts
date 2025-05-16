@@ -30,11 +30,6 @@ interface CategoryState {
   fetchCategories: () => void;
 }
 
-type PriceStore = {
-  priceRange: [number, number];
-  setPriceRange: (range: [number, number]) => void;
-};
-
 export const useProductStore = create<ProductState>((set, get) => ({
   products: [],
   filteredProducts: [],
@@ -43,8 +38,8 @@ export const useProductStore = create<ProductState>((set, get) => ({
   isLoading: true,
   error: null,
   selectedCategories: [],
-  sortKey: '',
-  sortOrder: '',
+  sortKey: "",
+  sortOrder: "",
   setProducts: (products) => {
     set({ products, isLoading: false });
   },
@@ -137,7 +132,64 @@ export const useCategoryStore = create<CategoryState>((set) => ({
   },
 }));
 
-export const usePriceStore = create<PriceStore>((set) => ({
-  priceRange: [0, 1000], // default range
-  setPriceRange: (range) => set({ priceRange: range }),
+export const useCartStore = create<CartState>((set, get) => ({
+  cart:
+    typeof window !== "undefined"
+      ? (JSON.parse(localStorage.getItem("cart") || "[]") as CartProduct[])
+      : [],
+
+  addToCart: (product) =>
+    set((state) => {
+      const existing = state.cart.find((cart) => cart.id === product.id);
+      const updatedCart = existing
+        ? state.cart.map((cart) =>
+            cart.id === product.id
+              ? { ...cart, quantity: cart.quantity + 1 }
+              : cart
+          )
+        : [...state.cart, { ...product, quantity: 1 }];
+
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return { cart: updatedCart };
+    }),
+
+  removeFromCart: (id) =>
+    set((state) => {
+      const updatedCart = state.cart.filter((p) => p.id !== id);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return { cart: updatedCart };
+    }),
+
+  clearCart: () => {
+    localStorage.removeItem("cart");
+    return { cart: [] };
+  },
+
+  increaseQuantity: (id: number) =>
+    set((state) => {
+      const updatedCart = state.cart.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return { cart: updatedCart };
+    }),
+
+  decreaseQuantity: (id: number) =>
+    set((state) => {
+      const updatedCart = state.cart
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0); // remove if quantity becomes 0
+
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return { cart: updatedCart };
+    }),
+
+  getTotalPrice: () =>
+    get().cart.reduce((total, item) => {
+      const discount = item.discountPercentage || 0;
+      const discountedPrice = item.price * (1 - discount / 100);
+      return total + discountedPrice * item.quantity;
+    }, 0),
 }));

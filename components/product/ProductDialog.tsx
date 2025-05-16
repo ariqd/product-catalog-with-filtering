@@ -1,16 +1,28 @@
 import { Product } from '@/app/types/product'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, ShoppingCart, Star } from 'lucide-react'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import useEmblaCarousel from 'embla-carousel-react';
 import { currencyFormatter } from '@/app/utils/transform';
 import { Button } from '../ui/button';
+import { useCartStore } from '@/app/store/productStore';
 
 const ProductDialog = ({ product }: { product: Product }) => {
+    const addToCart = useCartStore((state) => state.addToCart);
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
     const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
     const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+    const [status, setStatus] = useState("idle");
+
+    const handleAddToCart = useCallback((product: Product) => {
+        setStatus("loading");
+        setTimeout(() => {
+            addToCart(product);
+            setStatus('added');
+            setTimeout(() => setStatus('idle'), 1500);
+        }, 600);
+    }, [addToCart]);
 
     return (
         <DialogContent>
@@ -84,9 +96,13 @@ const ProductDialog = ({ product }: { product: Product }) => {
                                     <span className='text-green-700 text-sm mb-2'>
                                         {product.availabilityStatus}!
                                     </span>
-                                    <Button>
+                                    <Button onClick={() => handleAddToCart(product)}>
                                         <ShoppingCart />
-                                        <span>Add to Cart</span>
+                                        {status === "loading" && (
+                                            <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full inline-block mr-2"></span>
+                                        )}
+                                        {status === "added" ? "Added!" : status === "loading" ? "Adding..." : "Add to Cart"}
+
                                     </Button>
                                 </div>
                                 :

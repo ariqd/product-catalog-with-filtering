@@ -1,7 +1,7 @@
+import Navbar from '@/components/nav/Navbar';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,11 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-50 grid grid-rows-[auto-1fr-auto] min-h-screen`}>
-        <header className="py-4">
-          <div className="container mx-auto px-4 flex justify-between items-center">
-            <Link href="/" className="text-3xl font-bold">Product Catalog</Link>
-          </div>
-        </header>
+        <Navbar />
         {children}
         <footer className="bg-gray-800 text-white py-8 mt-12">
           <div className="container mx-auto px-4">
